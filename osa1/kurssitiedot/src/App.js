@@ -25,21 +25,23 @@ const App = () => {
 const Header = (props) => {
   return <h1>{props.course}</h1>;
 };
+
+
 const Content = (props) => {
   return (
     <>
-      <p>
-        {props.partone} {props.exercisesone}
-      </p>
-      <p>
-        {props.parttwo} {props.exercisestwo}
-      </p>
-      <p>
-        {props.parttre} {props.exercisestre}
-      </p>
+      <Part name={props.partone} exer={props.exercisesone}/>
+      <Part name={props.parttwo} exer={props.exercisestwo}/>
+      <Part name={props.parttre} exer={props.exercisestre}/>
     </>
   );
 };
+
+const Part=(props)=>{
+    return(
+        <p>{props.name} {props.exer}</p>
+    )
+}
 const Total = (props) => {
     return(
         <>
