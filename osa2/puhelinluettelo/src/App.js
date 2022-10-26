@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import Filter from "./components/Filter";
 import NewPersonForm from "./components/NewPersonForm";
 import RenderPersons from "./components/RenderPersons";
+import personService from "./services/personService";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,23 +13,39 @@ const App = () => {
   const [filter, setFilter] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-    useEffect(()=>{
-        axios.get('http://localhost:3001/persons')
-        .then(response =>{
-            setPersons(response.data)
-        })
-    },[])
+  useEffect(() => {
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
+    });
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
-    const personObject = { name: newName, number: newNumber };
+    const personObject = {
+      name: newName,
+      number: newNumber,
+    };
     const person = persons.filter((person) => person.name === newName);
     if (person.length !== 0) {
-      alert(`${personObject.name} is already added to phonebook`);
+        if (window.confirm(`${personObject.name} is already added to phonebook, replace old number with a new one?`)) {
+            personService
+            .update(person[0].id, {name: newName, number: newNumber})
+            .then((returnedPerson) => {
+                const updatedPersons = persons.map((person) => 
+                person.id !== returnedPerson.id ? person : returnedPerson);
+                setPersons(updatedPersons);
+                alert(`Updated ${personObject.name}`)
+            })
+            
+
+        }
+      
     } else {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      personService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(personObject));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
   const filterPersons = (event) => {
@@ -49,6 +66,15 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
   };
+
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService.remove(id).then((Response) => {
+        const updatePersons = persons.filter((person) => person.id !== id);
+        setPersons(updatePersons);
+      });
+    }
+  };
   const personsToShow = showAll ? persons : filtered;
   return (
     <div>
@@ -67,7 +93,10 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <RenderPersons personsToShow={personsToShow} />
+      <RenderPersons
+        personsToShow={personsToShow}
+        deletePerson={deletePerson}
+      />
     </div>
   );
 };
