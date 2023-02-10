@@ -9,9 +9,12 @@ blogsRouter.get("/", (request, response) => {
 
 blogsRouter.post("/", (request, response) => {
   const blog = new Blog(request.body);
+  if (typeof blog.title === "undefined" || typeof blog.url === "undefined") {
+    return response.status(400).json({error: "missing title and url fields."})
+  }
   blog.save().then((result) => {
     response.status(201).json(result);
   });
 });
 
-module.exports = blogsRouter
+module.exports = blogsRouter;
