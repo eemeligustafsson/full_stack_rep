@@ -71,13 +71,13 @@ blogsRouter.delete("/:id", async (request, response) => {
   return response.status(204).end();
 });
 blogsRouter.put("/:id", async (request, response) => {
-  const body = request.body;
+  const blog = request.body;
 
-  const blog = {
-    likes: body.likes,
-  };
-  await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
-  return response.status(200).end();
+  const newBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  }).populate("user", { username: 1, name: 1 });
+
+  response.status(200).json(newBlog.toJSON());
 });
 
 module.exports = blogsRouter;
