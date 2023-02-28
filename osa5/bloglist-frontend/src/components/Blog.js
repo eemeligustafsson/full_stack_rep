@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
-  const [showAllDetails, setShowAllDetails] = useState(false);
+  const [showAllDetails, setShowAllDetails] = useState(false)
 
   const toggleShowAllDetails = () => {
-    setShowAllDetails(!showAllDetails);
-  };
+    setShowAllDetails(!showAllDetails)
+  }
 
   const increaseLikes = () => {
     const blogUpdated = {
@@ -13,15 +13,15 @@ const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-    };
-    updateLikes(blog.id, blogUpdated);
-  };
+    }
+    updateLikes(blog.id, blogUpdated)
+  }
 
   const removeBlog = () => {
     if (window.confirm(`delete blog ${blog.title} ?`)) {
-      deleteBlog(blog.id);
+      deleteBlog(blog.id)
     }
-  };
+  }
 
   return (
     <div className="blog">
@@ -48,7 +48,7 @@ const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
