@@ -27,12 +27,12 @@ const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
     <div className="blog">
       {!showAllDetails && (
         <div>
-          {blog.title}
+          {blog.title} {blog.author}
           <button onClick={toggleShowAllDetails}>view</button>
         </div>
       )}
       {showAllDetails && (
-        <div>
+        <div className='all-details'>
           <p>
             {blog.title} {<button onClick={toggleShowAllDetails}>hide</button>}
           </p>

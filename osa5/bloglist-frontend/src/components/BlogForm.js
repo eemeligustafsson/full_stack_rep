@@ -57,7 +57,7 @@ const BlogForm = ({ createBlog }) => {
   )
 }
 
-BlogForm.PropTypes = {
+BlogForm.propTypes = {
   createBlog: PropTypes.func.isRequired,
 }
 
