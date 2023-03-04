@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 
 const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
@@ -18,9 +19,10 @@ const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
   }
 
   const removeBlog = () => {
-    if (window.confirm(`delete blog ${blog.title} ?`)) {
-      deleteBlog(blog.id)
-    }
+    //if (window.confirm(`delete blog ${blog.title} ?`)) {
+    //deleteBlog(blog.id)
+    //}
+    deleteBlog(blog.id)
   }
 
   return (
@@ -28,22 +30,22 @@ const Blog = ({ blog, username, updateLikes, deleteBlog }) => {
       {!showAllDetails && (
         <div>
           {blog.title} {blog.author}
-          <button onClick={toggleShowAllDetails}>view</button>
+          <button id='viewButton' onClick={toggleShowAllDetails}>view</button>
         </div>
       )}
       {showAllDetails && (
         <div className='all-details'>
           <p>
-            {blog.title} {<button onClick={toggleShowAllDetails}>hide</button>}
+            {blog.title} {<button id='hideButton' onClick={toggleShowAllDetails}>hide</button>}
           </p>
           <p>{blog.url}</p>
           <p>
-            likes: {blog.likes} {<button onClick={increaseLikes}>like</button>}
+            likes: {blog.likes} {<button id='likeButton' onClick={increaseLikes}>like</button>}
           </p>
           <p>{blog.author}</p>
           <p>{blog.user.username}</p>
           {blog.user.username === username && (
-            <button onClick={removeBlog}>delete</button>
+            <button id='deleteButton' onClick={removeBlog}>delete</button>
           )}
         </div>
       )}

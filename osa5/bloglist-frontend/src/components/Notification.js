@@ -5,12 +5,12 @@ const Notification = ({ message }) => {
     return null
   }
   if (message.includes('error')) {
-    return <div className="error">{message}</div>
+    return <div className='error'>{message}</div>
   }
   return <div className="success">{message}</div>
 }
 
-Notification.PropTypes = {
+Notification.propTypes = {
   message: PropTypes.string.isRequired,
 }
 

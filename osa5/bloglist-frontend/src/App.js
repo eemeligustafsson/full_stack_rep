@@ -10,7 +10,7 @@ import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [user, setUser] = useState(null)
   const tempUsername = username
@@ -28,11 +28,6 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }, [message])
 
   const addBlog = async (blogObject) => {
     blogFormref.current.toggleVisibility()
@@ -55,8 +50,15 @@ const App = () => {
       setUser(user)
       setUsername('')
       setMessage(`user ${user.username} successfully logged in`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
       setMessage(`error ${exception.response.data.error}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+
     }
   }
 
@@ -65,6 +67,9 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogListUser')
     setUser(null)
     setMessage('successfully logged out')
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   const updateLikes = async (id, updateBlog) => {
@@ -79,18 +84,19 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message}></Notification> 
       {!user && <LoginForm handleLogin={handleLogin} />}
       {user && (
         <div>
           <h2>blogs</h2>
           <p>
             logged in user: {user.username}{' '}
-            <button onClick={handleLogOut}>log out</button>{' '}
+            <button id='logoutButton' onClick={handleLogOut}>log out</button>{' '}
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormref}>
             <BlogForm createBlog={addBlog} username={tempUsername} />
           </Togglable>
-          <Notification message={message}></Notification>
+          
 
           {blogs
             .sort((x, y) => y.likes - x.likes)
