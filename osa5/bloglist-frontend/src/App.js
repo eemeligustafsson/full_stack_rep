@@ -13,7 +13,6 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [user, setUser] = useState(null)
-  const tempUsername = username
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -94,7 +93,7 @@ const App = () => {
             <button id='logoutButton' onClick={handleLogOut}>log out</button>{' '}
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormref}>
-            <BlogForm createBlog={addBlog} username={tempUsername} />
+            <BlogForm createBlog={addBlog} username={username} />
           </Togglable>
           
 
