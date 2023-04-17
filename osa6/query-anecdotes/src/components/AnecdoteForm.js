@@ -1,22 +1,28 @@
-import { createNewAnecdote } from "../requests"
-import { useQuery, useMutation, useQueryClient } from "react-query"
+import { useMutation, useQueryClient } from 'react-query'
+import { createAnecdote } from '../requests'
+
+import { useNotify } from '../NotificationContext'
 
 const AnecdoteForm = () => {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
+  const notifyWith = useNotify()
 
-    const newAnecdoteMutation = useMutation(createNewAnecdote, {
-        onSuccess: (newAnecdote) => {
-            const anecdotes = queryClient.getQueryData('anecdotes')
-            queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
-        }
-    })
+  const anecdoteMutation = useMutation(createAnecdote, {
+    onSuccess: ({ content }) => {
+      queryClient.invalidateQueries('anecdotes')
+      notifyWith(`anecdote '${content}' created`)
+    },
+    onError: (error) => {
+      notifyWith(error.response.data.error)
+    }
+  })
 
-  const onCreate = async (event) => {
+  const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({ content, votes: 0 })
-}
+    anecdoteMutation.mutate({ content, votes: 0 })
+  }
 
   return (
     <div>

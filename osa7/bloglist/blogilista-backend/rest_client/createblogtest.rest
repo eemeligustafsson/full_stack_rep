@@ -1,0 +1,10 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY29uZF91c2VyIiwiaWQiOiI2M2ViZTFjNmVhMTU2MTgxNTA2NWI0MDIiLCJpYXQiOjE2NzY0MDY4NDIsImV4cCI6MTY3NjQxMDQ0Mn0.F4zv3z4aLwseaZcR9nLRX8uCYf-4hZzgFUU3qzzZeoU
+
+{
+    "title": "seventh",
+    "author": "blog author",
+    "url": "sdsd",
+    "likes": 420
+}
