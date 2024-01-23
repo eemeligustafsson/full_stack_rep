@@ -106,32 +106,87 @@ type Author {
 }
 type Book {
     title: String!
-    author: Author!
+    author: String!
     published: Int!
     genres: [String!]!
 }
 type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
 }
+type Mutation {
+    addBook(
+        title: String!
+        author: String
+        published: Int!
+        genres: [String!]!
+        ): Book
+    editAuthor(
+        name: String!
+        setBornTo: Int!
+    ): Author
+}
 `
-
 const resolvers = {
      Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: () => books,
+    allBooks: (root, args) => {
+         if(args.author) {
+            const authorWhoseBooks = authors.find(a => a.name === args.author)
+            if(authorWhoseBooks) {
+                if(args.genre) {
+                    const authorsBooksAccordingToGenre = books.filter(b => b.author === authorWhoseBooks.name && b.genres.includes(args.genre))
+                    return authorsBooksAccordingToGenre
+                }
+                const authorsBooks = books.filter(b => b.author === authorWhoseBooks.name)
+                return authorsBooks
+            }
+            return books
+         }
+         if (args.genre) {
+                return books.filter(b => b.genres.includes(args.genre))
+         } 
+         return books
+
+
+     },
     allAuthors: () => authors
+    
   },
     Author: {
     bookCount: (root) => {
         const currentAuthor = authors.find(a => a.name === root.name)
-        const currentBooks = books.find(b => b.author === root.author)
-        return currentBooks.length
+        console.log(currentAuthor)
+        const booksFound = books.filter(b => b.author === currentAuthor.name)
+        return booksFound.length
     } 
   },
+  Mutation: {
+    addBook: (root, args) => {
+        const author = authors.find(a => a.name === args.author)
+        if (!author){
+            const newAuthor = {name: args.author, bookCount: 1}
+            authors = authors.concat(newAuthor)
+        } else {
+            author.bookCount += 1
+        }
+        const book = {title: args.title, published: args.published, genres: args.genres, author: author}
+        books = books.concat(book)
+        return book
+    },
+    editAuthor: (root, args) => {
+        const author = authors.find(a => a.name === args.name)
+        if(!author) {
+            return null
+        }
+        const updatedAuthor = {...author, born: args.setBornTo}
+        authors.map(a => a.name === args.name ? updatedAuthor : a)
+        return updatedAuthor 
+    }
+  }
 }
 
 const server = new ApolloServer({
