@@ -191,7 +191,6 @@ const resolvers = {
         if(!author) {
             return null
         }
-        console.log("born at backend", args.setBornTo, args.name)
         const updatedAuthor = {...author, born: args.setBornTo}
         authors.map(a => a.name === args.name ? updatedAuthor : a)
         return updatedAuthor 
