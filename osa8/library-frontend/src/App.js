@@ -4,7 +4,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import { useQuery } from '@apollo/client'
 import { useLazyQuery } from '@apollo/client';
-import { ALL_BOOKS, AUTHOR_BOOK_COUNT, BOOK_COUNT } from './queries'
+import { ALL_BOOKS, AUTHOR_BOOK_COUNT, BOOK_COUNT, ADD_BOOK } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')

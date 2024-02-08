@@ -100,34 +100,43 @@ let books = [
 const typeDefs = `
 type Author {
     name: String!
-    born: Int
+    born: Int 
+    bookCount: Int!
     id: ID!
-    bookCount: Int!
-}
-type Book {
+  }
+
+  input AuthorInput {
+    name: String!
+    born: Int 
+  }
+
+  type Book {
     title: String!
-    author: String!
     published: Int!
+    author: String!
     genres: [String!]!
-}
-type Query {
-    bookCount: Int!
+    id: ID!
+  }
+
+  type Query {
     authorCount: Int!
+    bookCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
-}
-type Mutation {
+  }
+
+  type Mutation {
     addBook(
-        title: String!
-        author: String
-        published: Int!
-        genres: [String!]!
-        ): Book
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
     editAuthor(
-        name: String!
-        setBornTo: Int!
+      name: String!    
+      setBornTo: Int!  
     ): Author
-}
+  }
 `
 const resolvers = {
      Query: {
@@ -173,7 +182,7 @@ const resolvers = {
         } else {
             author.bookCount += 1
         }
-        const book = {title: args.title, published: args.published, genres: args.genres, author: author}
+        const book = {title: args.title, published: args.published, genres: args.genres, author: args.author}
         books = books.concat(book)
         return book
     },
@@ -182,6 +191,7 @@ const resolvers = {
         if(!author) {
             return null
         }
+        console.log("born at backend", args.setBornTo, args.name)
         const updatedAuthor = {...author, born: args.setBornTo}
         authors.map(a => a.name === args.name ? updatedAuthor : a)
         return updatedAuthor 
